@@ -24,54 +24,53 @@ export const LoginForm: React.FC = () => {
 
   return (
     <div className="h-full flex items-center justify-center">
-      <Card className="w-full max-w-md mx-auto">
-        <CardHeader>
-          <h2 className="text-2xl font-semibold text-center">Welcome Back</h2>
-          <p className="text-muted-foreground text-center">
+      <Card className="w-full max-w-lg mx-auto">
+        <CardHeader className="space-y-3">
+          <h2 className="text-3xl font-semibold text-center">Welcome Back</h2>
+          <p className="text-muted-foreground text-center text-lg">
             Please sign in to continue
           </p>
         </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+        <CardContent className="space-y-6">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            <div className="space-y-3">
+              <Label htmlFor="email" className="text-base">Email</Label>
               <Input
                 id="email"
                 type="email"
                 placeholder="Enter your email"
+                className="h-12 text-lg"
                 {...register("email", { required: true })}
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+            <div className="space-y-3">
+              <Label htmlFor="password" className="text-base">Password</Label>
               <Input
                 id="password"
                 type="password"
                 placeholder="Enter your password"
+                className="h-12 text-lg"
                 {...register("password", { required: true })}
               />
             </div>
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full h-12 text-lg">
               Sign In
             </Button>
           </form>
           
-          <div className="relative my-6">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-300"></div>
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white text-gray-500">or</span>
-            </div>
+          <div className="flex items-center gap-4">
+            <div className="h-px bg-gray-300 flex-1"></div>
+            <span className="text-gray-500 text-base">or</span>
+            <div className="h-px bg-gray-300 flex-1"></div>
           </div>
 
           <Button
             type="button"
             variant="outline"
-            className="w-full"
+            className="w-full h-12 text-lg"
             onClick={handleGoogleSignIn}
           >
-            <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
+            <svg className="mr-2 h-5 w-5" viewBox="0 0 24 24">
               <path
                 d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
                 fill="#4285F4"
