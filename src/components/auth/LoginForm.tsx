@@ -1,15 +1,10 @@
+
 import React from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { createClient } from "@supabase/supabase-js";
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
 
 interface LoginFormData {
   email: string;
@@ -17,26 +12,14 @@ interface LoginFormData {
 }
 
 export const LoginForm: React.FC = () => {
-  const { register, handleSubmit, setError, formState: { errors } } = useForm<LoginFormData>();
+  const { register, handleSubmit } = useForm<LoginFormData>();
 
-  const onSubmit = async (data: LoginFormData) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email: data.email,
-      password: data.password,
-    });
-    if (error) {
-      setError("email", { message: error.message });
-      setError("password", { message: error.message });
-    } else {
-      console.log("User signed in successfully");
-    }
+  const onSubmit = (data: LoginFormData) => {
+    console.log("Form submitted:", data);
   };
 
-  const handleGoogleSignIn = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({ provider: "google" });
-    if (error) {
-      console.error("Google sign-in error:", error.message);
-    }
+  const handleGoogleSignIn = () => {
+    console.log("Google sign in clicked");
   };
 
   return (
@@ -57,9 +40,8 @@ export const LoginForm: React.FC = () => {
                 type="email"
                 placeholder="Enter your email"
                 className="h-12 text-lg"
-                {...register("email", { required: "Email is required" })}
+                {...register("email", { required: true })}
               />
-              {errors.email && <p className="text-red-500">{errors.email.message}</p>}
             </div>
             <div className="space-y-3">
               <Label htmlFor="password" className="text-base">Password</Label>
@@ -68,9 +50,8 @@ export const LoginForm: React.FC = () => {
                 type="password"
                 placeholder="Enter your password"
                 className="h-12 text-lg"
-                {...register("password", { required: "Password is required" })}
+                {...register("password", { required: true })}
               />
-              {errors.password && <p className="text-red-500">{errors.password.message}</p>}
             </div>
             <Button type="submit" className="w-full h-12 text-lg">
               Sign In
@@ -114,3 +95,4 @@ export const LoginForm: React.FC = () => {
     </div>
   );
 };
+
