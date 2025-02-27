@@ -16,16 +16,15 @@ export const GoogleSignInButton: React.FC<GoogleSignInButtonProps> = ({
 
   const handleSignIn = async () => {
     setIsLoading(true);
-    
-    // Show toast notification
-    toast({
+
+    // Show toast notification and store the returned toast object
+    const toastInstance = toast({
       title: "Signing in with Google...",
       description: "Please wait while we redirect you",
     });
-    
+
     // Simulate sign in delay
     setTimeout(() => {
-      // If there was an onSignIn callback provided, call it with mock user data
       if (onSignIn) {
         const mockUser = {
           id: "user-123",
@@ -35,10 +34,15 @@ export const GoogleSignInButton: React.FC<GoogleSignInButtonProps> = ({
         };
         onSignIn(mockUser);
       }
-      
+
+      // ✅ Properly dismiss the toast using the returned instance
+      if (toastInstance && toastInstance.dismiss) {
+        toastInstance.dismiss();
+      }
+
       // Redirect to home page
       navigate("/home");
-      
+
       setIsLoading(false);
     }, 1500);
   };
