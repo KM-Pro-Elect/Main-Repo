@@ -1,11 +1,10 @@
-
 import React from "react";
-import { CategoryCard } from "@/components/ui/CategoryCard";
+import { CategoryCard } from "./CategoryCard";
 
 const categories = [
   "Academic Policies",
   "Attendance Policies",
-  "Disipline Policies",
+  "Discipline Policies",
   "Safety Policies",
   "Extracurricular Policies",
   "Technology Use Policies",
@@ -13,7 +12,7 @@ const categories = [
 
 export const CategoryGrid = () => {
   return (
-    <section className="mt-14">
+    <section className="mt-14 w-full">
       <h2 className="text-black text-[25px] font-semibold mb-5">
         Explore Policies by Category
       </h2>
@@ -28,4 +27,3 @@ export const CategoryGrid = () => {
     </section>
   );
 };
-

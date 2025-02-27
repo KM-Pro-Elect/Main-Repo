@@ -1,4 +1,3 @@
-
 import React from "react";
 
 export const LoginImages: React.FC = () => {
@@ -17,4 +16,3 @@ export const LoginImages: React.FC = () => {
     </div>
   );
 };
-

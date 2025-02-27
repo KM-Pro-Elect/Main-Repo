@@ -1,10 +1,11 @@
-
 import React from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 
 interface LoginFormData {
   email: string;
@@ -13,13 +14,35 @@ interface LoginFormData {
 
 export const LoginForm: React.FC = () => {
   const { register, handleSubmit } = useForm<LoginFormData>();
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
   const onSubmit = (data: LoginFormData) => {
     console.log("Form submitted:", data);
+    // Show loading toast
+    toast({
+      title: "Signing in...",
+      description: "Redirecting to your dashboard",
+    });
+    
+    // Simulate a delay before redirecting
+    setTimeout(() => {
+      navigate("/home");
+    }, 1500);
   };
 
   const handleGoogleSignIn = () => {
     console.log("Google sign in clicked");
+    // Show loading toast
+    toast({
+      title: "Signing in with Google...",
+      description: "Please wait while we redirect you",
+    });
+    
+    // Simulate a delay before redirecting
+    setTimeout(() => {
+      navigate("/home");
+    }, 1500);
   };
 
   return (
@@ -95,4 +118,3 @@ export const LoginForm: React.FC = () => {
     </div>
   );
 };
-
