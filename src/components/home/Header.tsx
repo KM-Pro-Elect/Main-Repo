@@ -67,7 +67,7 @@ export const Header = () => {
             <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
               <button
                 onClick={handleSignOut}
-                className="block w-full px-4 py-2 text-left text-black hover:bg-gray-100 border border-black rounded-lg transition-colors duration-200"
+                className="block w-full px-4 py-2 text-left text-black hover:bg-gray-100 border border-black rounded-lg transition-colors duration-200 font-semibold"
               >
                 Sign Out
               </button>
