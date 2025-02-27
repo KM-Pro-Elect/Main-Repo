@@ -1,41 +1,78 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 export const Header = () => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const navigate = useNavigate(); // Initialize useNavigate
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const handleSignOut = () => {
+    // Add your sign-out logic here (e.g., clear user session, tokens, etc.)
+    console.log("User signed out");
+
+    // Redirect to the login page
+    navigate("/");
+  };
+
   return (
-    <header className="flex w-full max-w-[1374px] items-stretch gap-[40px_100px] flex-wrap max-md:max-w-full">
-      <nav className="grow shrink basis-auto max-md:max-w-full">
-        <div className="gap-5 flex max-md:flex-col max-md:items-stretch">
-          <div className="w-1/5 max-md:w-full max-md:ml-0">
+    <header className="flex w-full max-w-[1374px] items-center justify-between gap-5 flex-wrap max-md:max-w-full">
+      <nav className="flex items-center gap-5 max-md:flex-col max-md:items-stretch">
+        <div className="flex items-center gap-5 max-md:w-full max-md:justify-between">
+          {/* NEU Logo with Redirect */}
+          <a href="https://neuvle.neu.edu.ph/" target="_blank" rel="noopener noreferrer">
             <img
               src="https://cdn.builder.io/api/v1/image/assets/e3c6b0ec50df45b58e99e24af78e19b0/a15453eaca75974dc02d292e7448c7126333252cba35c6000812ad07e30db737?placeholderIfAbsent=true"
               alt="NEUPoliSeek Logo"
-              className="aspect-[1] object-contain w-[101px] shrink-0 max-w-full max-md:mt-10"
+              className="aspect-[1] object-contain w-[101px] shrink-0 max-w-full"
             />
-          </div>
-          <div className="w-4/5 ml-5 max-md:w-full max-md:ml-0">
-            <div className="text-black text-[22px] font-semibold self-stretch my-auto max-md:mt-10">
-              Home About Us Contact
-            </div>
+          </a>
+
+          <div className="flex items-center gap-5 ml-10">
+            <button className="text-black text-[22px] font-semibold hover:text-yellow-500 transition-colors duration-200">
+              Home
+            </button>
+            <button className="text-black text-[22px] font-semibold hover:text-yellow-500 transition-colors duration-200">
+              About Us
+            </button>
+            <button className="text-black text-[22px] font-semibold hover:text-yellow-500 transition-colors duration-200">
+              Contact
+            </button>
           </div>
         </div>
       </nav>
-      <div className="flex items-stretch gap-9 my-auto">
-        <img
-          src="https://cdn.builder.io/api/v1/image/assets/e3c6b0ec50df45b58e99e24af78e19b0/bf5834d7ef2f47c1c0e03a904da3f4fd434d9906473c3fdebfd943354ba46957?placeholderIfAbsent=true"
-          alt="User Icon"
-          className="aspect-[1] object-contain w-10 shrink-0 my-auto"
-        />
-        <div className="flex items-stretch">
-          <img
-            src="https://cdn.builder.io/api/v1/image/assets/e3c6b0ec50df45b58e99e24af78e19b0/f559f5b5469f122ba5ac3cc86b241e2d5ee59aacf2762f8f04be06dedbc42300?placeholderIfAbsent=true"
-            alt="Settings"
-            className="aspect-[1.05] object-contain w-20 shrink-0"
-          />
-          <img
-            src="https://cdn.builder.io/api/v1/image/assets/e3c6b0ec50df45b58e99e24af78e19b0/a173d29bb6ba64cd7034e49a4aa0e670371f0ca6d331a87a20afdb8ab45c065c?placeholderIfAbsent=true"
-            alt="Menu"
-            className="aspect-[1] object-contain w-[50px] shrink-0 my-auto"
-          />
+      <div className="flex items-center gap-5">
+        <div className="flex items-center gap-2 relative">
+          <button onClick={toggleDropdown}>
+            <img
+              src="https://cdn.builder.io/api/v1/image/assets/e3c6b0ec50df45b58e99e24af78e19b0/f559f5b5469f122ba5ac3cc86b241e2d5ee59aacf2762f8f04be06dedbc42300?placeholderIfAbsent=true"
+              alt="Profile Picture"
+              className="aspect-[1.05] object-contain w-20 shrink-0"
+            />
+          </button>
+
+          {/* Dropdown Arrow */}
+          <button onClick={toggleDropdown}>
+            <img
+              src="https://cdn.builder.io/api/v1/image/assets/e3c6b0ec50df45b58e99e24af78e19b0/a173d29bb6ba64cd7034e49a4aa0e670371f0ca6d331a87a20afdb8ab45c065c?placeholderIfAbsent=true"
+              alt="Menu"
+              className="aspect-[1] object-contain w-[50px] shrink-0"
+            />
+          </button>
+
+          {/* Dropdown Menu */}
+          {isDropdownOpen && (
+            <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+              <button
+                onClick={handleSignOut}
+                className="block w-full px-4 py-2 text-left text-black hover:bg-gray-100 border border-black rounded-lg transition-colors duration-200"
+              >
+                Sign Out
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </header>
