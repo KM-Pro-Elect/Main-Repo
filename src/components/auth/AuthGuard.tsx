@@ -1,7 +1,6 @@
-
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { supabase } from '@/integrations/supabase/client';
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "../SupabaseClient"; 
 import { useToast } from "@/hooks/use-toast";
 
 interface AuthGuardProps {
@@ -15,62 +14,70 @@ const AuthGuard = ({ children }: AuthGuardProps) => {
 
   useEffect(() => {
     const checkAuth = async () => {
-      try {
-        const { data: { session } } = await supabase.auth.getSession();
-        
-        // If no session, redirect to login
-        if (!session) {
-          navigate('/');
-          return;
-        }
+      setIsLoading(true);
 
-        // Check if the user's email is from NEU
-        if (!session.user.email?.endsWith('@neu.edu.ph')) {
-          await supabase.auth.signOut();
-          toast({
-            variant: "destructive",
-            title: "Access Denied",
-            description: "Only @neu.edu.ph email addresses are allowed",
-          });
-          navigate('/');
-          return;
-        }
-      } catch (error) {
-        console.error('Auth check failed:', error);
-        navigate('/');
-      } finally {
-        setIsLoading(false);
-      }
-    };
+      const { data: { session }, error } = await supabase.auth.getSession();
 
-    // Initial check
-    checkAuth();
-
-    // Listen for auth state changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (event === 'SIGNED_OUT' || !session) {
-        navigate('/');
+      if (error) {
+        console.error("Auth check failed:", error);
+        navigate("/");
         return;
       }
 
-      if (!session.user.email?.endsWith('@neu.edu.ph')) {
+      // Redirect if no session
+      if (!session) {
+        navigate("/");
+        return;
+      }
+
+      // Restrict access to NEU email users only
+      if (!session.user.email?.endsWith("@neu.edu.ph")) {
         await supabase.auth.signOut();
         toast({
           variant: "destructive",
           title: "Access Denied",
           description: "Only @neu.edu.ph email addresses are allowed",
         });
-        navigate('/');
+        navigate("/");
+        return;
       }
-    });
+
+      setIsLoading(false);
+    };
+
+    checkAuth();
+
+    // Listen for auth state changes
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (event === "SIGNED_OUT" || !session) {
+          navigate("/");
+          return;
+        }
+
+        if (!session.user.email?.endsWith("@neu.edu.ph")) {
+          await supabase.auth.signOut();
+          toast({
+            variant: "destructive",
+            title: "Access Denied",
+            description: "Only @neu.edu.ph email addresses are allowed",
+          });
+          navigate("/");
+        }
+      }
+    );
 
     return () => {
-      subscription.unsubscribe();
+      authListener.subscription.unsubscribe();
     };
   }, [navigate, toast]);
 
   if (isLoading) {
-    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        Loading...
+      </div>
+    );
   }
 
   return <>{children}</>;
