@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../SupabaseClient";
@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { GoogleSignInButton } from "./GoogleSignInButton"; // Import the button component
+import { GoogleSignInButton } from "./GoogleSignInButton";
 
 interface LoginFormData {
   email: string;
@@ -20,18 +20,22 @@ export const LoginForm: React.FC = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    const checkSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session?.user && !session.user.email?.endsWith("@neu.edu.ph")) {
-        await supabase.auth.signOut();
-        toast({
-          variant: "destructive",
-          title: "Access Denied",
-          description: "Only @neu.edu.ph email addresses are allowed",
-        });
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (session?.user && !session.user.email?.endsWith("@neu.edu.ph")) {
+          await supabase.auth.signOut();
+          toast({
+            variant: "destructive",
+            title: "Access Denied",
+            description: "Only @neu.edu.ph email addresses are allowed",
+          });
+        }
       }
+    );
+
+    return () => {
+      authListener.subscription.unsubscribe();
     };
-    checkSession();
   }, [toast]);
 
   const validateEmail = (email: string) => email.endsWith("@neu.edu.ph");
@@ -108,14 +112,9 @@ export const LoginForm: React.FC = () => {
             <div className="h-px bg-gray-300 flex-1"></div>
           </div>
 
-          {/* Google Sign-In Button */}
           <GoogleSignInButton />
         </CardContent>
       </Card>
     </div>
   );
 };
-
-
-
-

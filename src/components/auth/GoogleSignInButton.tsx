@@ -19,7 +19,7 @@ export const GoogleSignInButton: React.FC = () => {
     });
 
     // Initiate Google OAuth sign-in
-    const { error } = await supabase.auth.signInWithOAuth({
+    const { data,error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {redirectTo: `${window.location.origin}/home`,
         queryParams: {
