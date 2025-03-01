@@ -1,9 +1,10 @@
+
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate, Link } from "react-router-dom"; // Import Link
 
 export const Header = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -64,7 +65,13 @@ export const Header = () => {
 
           {/* Dropdown Menu */}
           {isDropdownOpen && (
-            <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+            <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-10 flex flex-col gap-2">
+              <Link
+                to="/admin"
+                className="block w-full px-4 py-2 text-left text-black hover:bg-gray-100 border border-black rounded-lg transition-colors duration-200 font-semibold"
+              >
+                Admin Management File
+              </Link>
               <button
                 onClick={handleSignOut}
                 className="block w-full px-4 py-2 text-left text-black hover:bg-gray-100 border border-black rounded-lg transition-colors duration-200 font-semibold"
