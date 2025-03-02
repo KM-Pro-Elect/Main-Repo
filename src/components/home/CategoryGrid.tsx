@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
+import { supabase } from "../SupabaseClient";
 import { CategoryCard } from "./CategoryCard";
+import { PdfModal } from "../PdfModal"; 
 
 const categories = [
   "Academic Policies",
@@ -11,8 +13,22 @@ const categories = [
 ];
 
 export const CategoryGrid: React.FC = () => {
-  const handleCategoryClick = (category: string) => {
-    alert(`You clicked on ${category}`); // Replace with navigation or action
+  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+
+  const handleCategoryClick = async (category: string) => {
+    // Fetch the specific "NEUPoliseek.pdf" file in the category folder
+    const { data } = supabase.storage
+      .from("NEUPoliSeek")
+      .getPublicUrl(`${category}/NEUPoliSeek.pdf`);
+
+    if (!data.publicUrl) {
+      alert(`No PDF found for ${category}`);
+      return;
+    }
+
+    setPdfUrl(data.publicUrl);
+    setModalOpen(true); // Open modal
   };
 
   return (
@@ -32,6 +48,11 @@ export const CategoryGrid: React.FC = () => {
           ))}
         </div>
       </div>
+
+      {/* PDF Modal */}
+      {modalOpen && pdfUrl && (
+        <PdfModal pdfUrl={pdfUrl} onClose={() => setModalOpen(false)} />
+      )}
     </section>
   );
 };
