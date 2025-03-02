@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import Home from "./components/home/Home";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
+import AuthGuard from "./components/auth/AuthGuard"; // Import the AuthGuard component
 
 const queryClient = new QueryClient();
 
@@ -18,9 +19,26 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/admin" element={<Admin />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          
+          {/* Protect Routes with AuthGuard */}
+          <Route 
+            path="/home" 
+            element={
+              <AuthGuard>
+                <Home />
+              </AuthGuard>
+            } 
+          />
+          <Route 
+            path="/admin" 
+            element={
+              <AuthGuard>
+                <Admin />
+              </AuthGuard>
+            } 
+          />
+
+          {/* Catch-All Route */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

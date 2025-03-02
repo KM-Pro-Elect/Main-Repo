@@ -30,8 +30,9 @@ const AuthGuard = ({ children }: AuthGuardProps) => {
         return;
       }
 
-      // Restrict access to NEU email users only
-      if (!session.user.email?.endsWith("@neu.edu.ph")) {
+      // Restrict access to @neu.edu.ph email users only
+      const userEmail = session.user.email;
+      if (!userEmail || !userEmail.endsWith("@neu.edu.ph")) {
         await supabase.auth.signOut();
         toast({
           variant: "destructive",
