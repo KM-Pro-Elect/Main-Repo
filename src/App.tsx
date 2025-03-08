@@ -4,10 +4,11 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
-import Home from "./components/home/Home";
+import Home from "./components/home/UserHome";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
-import AuthGuard from "./components/auth/AuthGuard"; // Import the AuthGuard component
+import AuthGuard from "./components/auth/AuthGuard";
+import GuestHome from "./components/guest/GuestHome"; // Import the GuestHome component
 
 const queryClient = new QueryClient();
 
@@ -37,6 +38,9 @@ const App = () => (
               </AuthGuard>
             } 
           />
+
+          {/* Guest Home Route */}
+          <Route path="/guesthome" element={<GuestHome />} />
 
           {/* Catch-All Route */}
           <Route path="*" element={<NotFound />} />

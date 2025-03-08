@@ -13,7 +13,7 @@ export const PdfModal: React.FC<PdfModalProps> = ({ pdfUrl, onClose }) => {
           onClick={onClose}
           className="absolute top-2 right-2 bg-red-500 text-white px-3 py-1 rounded-md"
         >
-          Close
+          X
         </button>
         <iframe src={pdfUrl} className="w-full h-full" />
       </div>

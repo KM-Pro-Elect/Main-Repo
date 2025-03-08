@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { GoogleSignInButton } from "./GoogleSignInButton";
+import { GuestLoginButton } from "./GuestLoginButton"; // Import the GuestLoginButton
 
 interface LoginFormData {
   email: string;
@@ -113,6 +114,7 @@ export const LoginForm: React.FC = () => {
           </div>
 
           <GoogleSignInButton />
+          <GuestLoginButton /> {/* Add the GuestLoginButton here */}
         </CardContent>
       </Card>
     </div>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { supabase } from "../SupabaseClient"; 
+import { useNavigate, useLocation } from "react-router-dom";
+import { supabase } from "../SupabaseClient";
 import { useToast } from "@/hooks/use-toast";
 
 interface AuthGuardProps {
@@ -10,6 +10,7 @@ interface AuthGuardProps {
 const AuthGuard = ({ children }: AuthGuardProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
+  const location = useLocation();
   const { toast } = useToast();
 
   useEffect(() => {
@@ -24,13 +25,19 @@ const AuthGuard = ({ children }: AuthGuardProps) => {
         return;
       }
 
-      // Redirect if no session
+      // Allow guest access to the /home route
+      if (location.pathname === "/home") {
+        setIsLoading(false);
+        return;
+      }
+
+      // Redirect if no session (for non-guest routes)
       if (!session) {
         navigate("/");
         return;
       }
 
-      // Restrict access to @neu.edu.ph email users only
+      // Restrict access to @neu.edu.ph email users only (for non-guest routes)
       const userEmail = session.user.email;
       if (!userEmail || !userEmail.endsWith("@neu.edu.ph")) {
         await supabase.auth.signOut();
@@ -71,7 +78,7 @@ const AuthGuard = ({ children }: AuthGuardProps) => {
     return () => {
       authListener.subscription.unsubscribe();
     };
-  }, [navigate, toast]);
+  }, [navigate, toast, location.pathname]);
 
   if (isLoading) {
     return (

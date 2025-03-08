@@ -4,7 +4,7 @@ import { SearchBar } from "./SearchBar";
 import { CategoryGrid } from "./CategoryGrid";
 import { FAQSection } from "./FAQSection";
 
-const Home = () => {
+const UserHome = () => {
   return (
     <main className="bg-white flex flex-col items-center px-5 py-8">
       <div className="w-full max-w-[1374px] flex flex-col items-center">
@@ -17,4 +17,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default UserHome;
