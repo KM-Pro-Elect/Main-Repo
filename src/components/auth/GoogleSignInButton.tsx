@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { supabase } from "../SupabaseClient";
 import { Button } from "@/components/ui/button";
@@ -19,9 +20,10 @@ export const GoogleSignInButton: React.FC = () => {
     });
 
     // Initiate Google OAuth sign-in
-    const { data,error } = await supabase.auth.signInWithOAuth({
+    const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "google",
-      options: {redirectTo: `${window.location.origin}/home`,
+      options: {
+        redirectTo: `${window.location.origin}/home`,
         queryParams: {
           access_type: "offline",
           prompt: "consent",
@@ -38,6 +40,7 @@ export const GoogleSignInButton: React.FC = () => {
       });
       setIsLoading(false);
     } else {
+      // Record login will happen via useLoginTracker hook when the user navigates to a protected route
       setTimeout(() => navigate("/home"), 1500);
     }
   };

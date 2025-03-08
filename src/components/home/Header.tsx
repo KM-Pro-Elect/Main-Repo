@@ -107,7 +107,7 @@ export const Header = () => {
                   to="/admin"
                   className="w-full px-4 py-2 text-left text-black hover:bg-gray-100 rounded-lg transition-colors duration-200 font-semibold"
                 >
-                  Admin Management File
+                  Admin Dashboard
                 </Link>
                 {/* Grey Separator Line */}
                 <div className="w-full h-px bg-gray-200 my-1"></div>

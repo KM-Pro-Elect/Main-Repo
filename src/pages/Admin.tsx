@@ -1,11 +1,14 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
-import { Edit, FileText, BarChart, Grid, Trash, Upload } from "lucide-react";
+import { Edit, FileText, BarChart, Grid, Trash, Upload, Users } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Header } from "../components/home/Header";
+import { supabase } from "@/components/SupabaseClient";
+import { useLoginTracker } from "@/hooks/useLoginTracker";
+import { LoginTracker } from "@/components/admin/LoginTracker";
 import {
   Sidebar,
   SidebarContent,
@@ -27,6 +30,9 @@ const Admin = () => {
   const [pdfs, setPdfs] = useState<PDF[]>([]);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [activeSection, setActiveSection] = useState<string>("manage-pdfs");
+
+  // Record the current user's login
+  useLoginTracker();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -107,8 +113,8 @@ const Admin = () => {
       case "statistics":
         return (
           <div>
-            <h1 className="text-3xl font-bold mb-6">Statistics</h1>
-            <p className="text-gray-600">Statistics panel content will appear here.</p>
+            <h1 className="text-3xl font-bold mb-6">Admin - User Login Statistics</h1>
+            <LoginTracker />
           </div>
         );
       case "category":
@@ -151,7 +157,7 @@ const Admin = () => {
                     tooltip="Statistics"
                   >
                     <BarChart className="mr-2" />
-                    <span>Statistics</span>
+                    <span>Login Statistics</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
