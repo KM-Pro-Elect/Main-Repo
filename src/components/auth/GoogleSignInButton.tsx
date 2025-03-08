@@ -56,7 +56,7 @@ export const GoogleSignInButton: React.FC = () => {
         alt="Google logo"
         className="w-5 h-5"
       />
-      {isLoading ? "Continue..." : "Continue with Google"}
+      {isLoading ? "Continue with Google" : "Continue with Google"}
     </Button>
   );
 };
