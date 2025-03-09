@@ -17,6 +17,7 @@ import { Calendar, Clock, Users } from "lucide-react";
 
 interface LoginRecord {
   id: string;
+  user_id: string;
   user_name: string;
   user_role?: string;
   login_time: string;
@@ -62,6 +63,18 @@ export const LoginTracker = () => {
     fetchLoginRecords();
   }, [toast]);
 
+  // Format date for better readability
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString();
+  };
+
+  // Format time for better readability
+  const formatTime = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleTimeString();
+  };
+
   return (
     <Card className="border shadow-sm">
       <CardHeader className="bg-white pb-3">
@@ -91,13 +104,14 @@ export const LoginTracker = () => {
                 {loginRecords.some(record => record.user_role) && (
                   <TableHead className="font-medium">Role</TableHead>
                 )}
+                <TableHead className="font-medium">Login Date</TableHead>
                 <TableHead className="font-medium">Login Time</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {loginRecords.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={3} className="text-center text-muted-foreground">
+                  <TableCell colSpan={4} className="text-center text-muted-foreground">
                     No login records found.
                   </TableCell>
                 </TableRow>
@@ -117,9 +131,11 @@ export const LoginTracker = () => {
                     )}
                     <TableCell className="flex items-center gap-1">
                       <Calendar className="h-3 w-3 text-gray-500" />
-                      <span>{new Date(record.login_time).toLocaleDateString()}</span>
-                      <Clock className="h-3 w-3 ml-2 text-gray-500" />
-                      <span>{new Date(record.login_time).toLocaleTimeString()}</span>
+                      <span>{formatDate(record.login_time)}</span>
+                    </TableCell>
+                    <TableCell className="flex items-center gap-1">
+                      <Clock className="h-3 w-3 text-gray-500" />
+                      <span>{formatTime(record.login_time)}</span>
                     </TableCell>
                   </TableRow>
                 ))

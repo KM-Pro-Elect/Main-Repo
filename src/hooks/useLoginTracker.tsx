@@ -44,8 +44,8 @@ export const useLoginTracker = () => {
             { 
               user_id: user.id,
               user_name: user.user_metadata?.full_name || user.email,
-              // Either use role from metadata or default to 'User'
-              // Only add user_role if it exists in the table
+              // Only add user_role if it exists in user.user_metadata
+              ...(user.user_metadata?.role && { user_role: user.user_metadata.role }),
               login_time: new Date().toISOString(),
             }
           ]);
@@ -53,7 +53,8 @@ export const useLoginTracker = () => {
           if (error) {
             console.error('Failed to record login:', error);
             
-            if (error.message.includes("role")) {
+            // If the error is related to the user_role column not existing
+            if (error.message.includes("role") || error.message.includes("column")) {
               // Try again without the role field
               const { error: retryError } = await supabase.from('user_logins').insert([
                 { 
@@ -64,12 +65,15 @@ export const useLoginTracker = () => {
               ]);
               
               if (retryError) {
+                console.error('Failed to record login on retry:', retryError);
                 toast({
                   variant: "destructive",
                   title: "Failed to record login",
                   description: retryError.message,
                   duration: 5000,
                 });
+              } else {
+                console.log("Login recorded successfully (without role)");
               }
             } else {
               toast({

@@ -34,7 +34,7 @@ export const AdminSidebar = ({ activeSection, setActiveSection }: AdminSidebarPr
               }`}
             >
               <BarChart className="h-5 w-5" />
-              <span>Statistics</span>
+              <span>Login Activity</span>
             </button>
           </li>
           <li>
