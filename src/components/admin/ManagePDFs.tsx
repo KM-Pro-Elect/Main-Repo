@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -62,7 +61,7 @@ export const ManagePDFs = () => {
             <Button 
               onClick={handleUpload} 
               disabled={!selectedFile} 
-              className="bg-teal-500 hover:bg-teal-600 text-white"
+              className="bg-green-500 hover:bg-green-400 text-white"
             >
               <Upload className="mr-2 h-4 w-4" /> Upload New PDF
             </Button>

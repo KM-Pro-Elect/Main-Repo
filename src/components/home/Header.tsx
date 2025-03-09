@@ -1,30 +1,39 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "../SupabaseClient"; // Adjusted the import path
+import { ChevronDown, LayoutDashboard, LogOut } from "lucide-react"; // Import icons
 
 export const Header = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [profilePicture, setProfilePicture] = useState(
-    "https://cdn.builder.io/api/v1/image/assets/e3c6b0ec50df45b58e99e24af78e19b0/f559f5b5469f122ba5ac3cc86b241e2d5ee59aacf2762f8f04be06dedbc42300?placeholderIfAbsent=true" // Default image
+    "https://cdn.builder.io/api/v1/image/assets/e3c6b0ec50df45b58e99e24af78e19b0/f559f5b5469f122ba5ac3cc86b241e2d5ee59aacf2762f8f04be06dedbc42300?placeholderIfAbsent=true"
   );
+  const [userName, setUserName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchProfilePicture = async () => {
+    const fetchUserInfo = async () => {
       const { data: { session } } = await supabase.auth.getSession();
-      console.log("Session:", session); // Debugging: Check the session object
-      if (session?.user?.user_metadata?.avatar_url) {
-        setProfilePicture(session.user.user_metadata.avatar_url);
+      if (session?.user) {
+        setUserName(session.user.user_metadata?.full_name || session.user.email);
+        setUserEmail(session.user.email);
+        if (session.user.user_metadata?.avatar_url) {
+          setProfilePicture(session.user.user_metadata.avatar_url);
+        }
       }
     };
 
-    fetchProfilePicture();
+    fetchUserInfo();
 
-    // Listen for auth state changes
     const { data: authListener } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        if (event === "SIGNED_IN" && session?.user?.user_metadata?.avatar_url) {
-          setProfilePicture(session.user.user_metadata.avatar_url);
+        if (event === "SIGNED_IN" && session?.user) {
+          setUserName(session.user.user_metadata?.full_name || session.user.email);
+          setUserEmail(session.user.email);
+          if (session.user.user_metadata?.avatar_url) {
+            setProfilePicture(session.user.user_metadata.avatar_url);
+          }
         }
       }
     );
@@ -86,36 +95,44 @@ export const Header = () => {
               />
             </button>
 
+            {/* Modern Dropdown Icon */}
             <button onClick={toggleDropdown} className="transition-transform duration-200 ease-in-out">
-              <img
-                src="https://cdn.builder.io/api/v1/image/assets/e3c6b0ec50df45b58e99e24af78e19b0/a173d29bb6ba64cd7034e49a4aa0e670371f0ca6d331a87a20afdb8ab45c065c?placeholderIfAbsent=true"
-                alt="Menu"
-                className={`aspect-[1] object-contain w-[50px] shrink-0 transition-transform duration-200 ease-in-out ${
+              <ChevronDown 
+                className={`w-6 h-6 text-black transition-transform duration-200 ${
                   isDropdownOpen ? "rotate-180" : "rotate-0"
-                }`}
+                }`} 
               />
             </button>
 
             {/* Dropdown Menu with Animation */}
             <div
-              className={`absolute right-0 top-full mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-10 transition-all duration-200 ease-in-out ${
+              className={`absolute right-0 top-full mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-10 transition-all duration-200 ease-in-out ${
                 isDropdownOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 pointer-events-none"
               }`}
             >
               <div className="flex flex-col p-2">
+                {/* User Info */}
+                <div className="px-4 py-3 bg-gray-100 rounded-t-lg flex items-center gap-2">
+                  <div>
+                    <div className="text-sm font-semibold text-black truncate">{userName}</div>
+                    <div className="text-xs text-gray-600 truncate">{userEmail}</div>
+                  </div>
+                </div>
+                {/* Grey Separator Line */}
+                <div className="w-full h-px bg-gray-200 my-1"></div>
                 <Link
                   to="/admin"
-                  className="w-full px-4 py-2 text-left text-black hover:bg-gray-100 rounded-lg transition-colors duration-200 font-semibold"
+                  className="w-full px-4 py-2 text-left bg-yellow-500 text-white hover:bg-yellow-600 rounded-lg transition-colors duration-200 font-semibold flex items-center gap-2"
                 >
-                  Admin Dashboard
+                  <LayoutDashboard className="w-5 h-5" /> Admin Dashboard
                 </Link>
                 {/* Grey Separator Line */}
                 <div className="w-full h-px bg-gray-200 my-1"></div>
                 <button
                   onClick={handleSignOut}
-                  className="w-full px-4 py-2 text-left text-black hover:bg-gray-100 rounded-lg transition-colors duration-200 font-semibold"
+                  className="w-full px-4 py-2 text-left bg-red-500 text-white hover:bg-red-600 rounded-lg transition-colors duration-200 font-semibold flex items-center gap-2"
                 >
-                  Sign Out
+                  <LogOut className="w-5 h-5" /> Sign Out
                 </button>
               </div>
             </div>

@@ -38,15 +38,15 @@ export const AdminSidebar = ({ activeSection, setActiveSection }: AdminSidebarPr
             </button>
           </li>
           <li>
-            <button
-              onClick={() => setActiveSection("category")}
-              className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-left ${
-                activeSection === "category" ? "bg-gray-200 text-gray-900" : "text-gray-600 hover:bg-gray-100"
-              }`}
-            >
-              <Grid className="h-5 w-5" />
-              <span>Category</span>
-            </button>
+          <button
+            onClick={() => setActiveSection("category")} // Ensure this is correct
+            className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-left ${
+              activeSection === "category" ? "bg-gray-200 text-gray-900" : "text-gray-600 hover:bg-gray-100"
+            }`}
+          >
+            <Grid className="h-5 w-5" />
+            <span>Category</span>
+          </button>
           </li>
         </ul>
       </nav>
