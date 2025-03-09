@@ -8,23 +8,20 @@ import {
 
 const faqs = [
   {
-    question:
-      "What is the attendance policy, and how many absences are allowed?",
-    answer: "Details about attendance policy will be displayed here.",
+    question: "What is the penalty for not wearing the school ID on campus?",
+    answer: "For the first offense, the student receives a warning or verbal reprimand. Repeated offenses may lead to written warnings or student service.",
   },
   {
-    question: "What are the consequences of violating the dress code policy?",
-    answer: "Information about dress code violations will be shown here.",
+    question: "What is the penalty for not wearing the prescribed uniform?",
+    answer: "For the first offense, the student receives a warning or verbal reprimand. For the second offense, a written warning is issued, and for the third offense, the student must render 20 hours of student service or attend a relevant seminar.",
   },
   {
-    question:
-      "Can I appeal a disciplinary decision made under the school's policies?",
-    answer: "Appeal process details will be displayed here.",
+    question: "Can students wear civilian attire on campus?",
+    answer: "Yes, but only with a permit from the College Dean and Office of Student Discipline. Students must still adhere to guidelines on decent clothing.",
   },
   {
-    question:
-      "What is the school's policy on academic integrity and plagiarism?",
-    answer: "Academic integrity policy information will be shown here.",
+    question: "Can students access university facilities like the library and gym?",
+    answer: "Yes, students have the right to access university facilities, such as the library, gym, and computer labs, subject to regulations and guidelines.",
   },
 ];
 
@@ -47,7 +44,7 @@ export const FAQSection = () => {
                 <AccordionTrigger className="text-[22px] font-semibold">
                   {faq.question}
                 </AccordionTrigger>
-                <AccordionContent className="text-[18px]">
+                <AccordionContent className="text-[18px] bg-gray-100 p-4 rounded-lg">
                   {faq.answer}
                 </AccordionContent>
               </AccordionItem>
