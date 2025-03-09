@@ -1,18 +1,35 @@
+
 import * as React from "react";
 import { GoogleSignInButton } from "./GoogleSignInButton";
 import { GuestLoginButton } from "./GuestLoginButton";
 import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/components/SupabaseClient";
+import { useLoginTracker } from "@/hooks/useLoginTracker";
 
 export const WelcomeCard: React.FC = () => {
   const [user, setUser] = React.useState<any>(null);
   const navigate = useNavigate();
+  
+  // Use the login tracker to record logins
+  useLoginTracker();
 
-  const handleSignIn = (userData: any) => {
-    setUser(userData);
-    console.log("User signed in:", userData);
-  };
+  // Check for existing user session on component mount
+  React.useEffect(() => {
+    const checkSession = async () => {
+      const { data } = await supabase.auth.getSession();
+      if (data.session?.user) {
+        setUser({
+          name: data.session.user.user_metadata?.full_name || data.session.user.email,
+          email: data.session.user.email,
+          picture: data.session.user.user_metadata?.avatar_url || "https://cdn-icons-png.flaticon.com/512/149/149071.png"
+        });
+      }
+    };
+    
+    checkSession();
+  }, []);
 
   return (
     <div className="relative w-full flex flex-col items-end pr-20">
@@ -41,7 +58,7 @@ export const WelcomeCard: React.FC = () => {
           </div>
         ) : (
           <div className="flex flex-col gap-4 w-full">
-            <GoogleSignInButton onSignIn={handleSignIn} />
+            <GoogleSignInButton />
 
             {/* Divider with "or" */}
             <div className="flex items-center w-full my-2">

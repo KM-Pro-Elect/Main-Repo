@@ -13,11 +13,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Calendar, Clock, Users } from "lucide-react";
 
 interface LoginRecord {
   id: string;
   user_name: string;
-  user_role: string;
+  user_role?: string;
   login_time: string;
 }
 
@@ -29,6 +30,7 @@ export const LoginTracker = () => {
   useEffect(() => {
     const fetchLoginRecords = async () => {
       try {
+        console.log("Fetching login records...");
         const { data, error } = await supabase
           .from('user_logins')
           .select('*')
@@ -42,6 +44,7 @@ export const LoginTracker = () => {
             description: error.message,
           });
         } else {
+          console.log("Login records fetched:", data);
           setLoginRecords(data || []);
         }
       } catch (error) {
@@ -60,9 +63,12 @@ export const LoginTracker = () => {
   }, [toast]);
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>User Login Activity</CardTitle>
+    <Card className="border shadow-sm">
+      <CardHeader className="bg-white pb-3">
+        <CardTitle className="text-xl font-bold flex items-center gap-2">
+          <Users className="h-5 w-5 text-gray-600" />
+          User Login Activity
+        </CardTitle>
       </CardHeader>
       <CardContent>
         {loading ? (
@@ -79,10 +85,13 @@ export const LoginTracker = () => {
                 : "A list of recent user login activities."}
             </TableCaption>
             <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Role</TableHead>
-                <TableHead>Login Time</TableHead>
+              <TableRow className="bg-gray-50">
+                <TableHead className="font-medium">Name</TableHead>
+                {/* Only show Role column if user_role exists in any record */}
+                {loginRecords.some(record => record.user_role) && (
+                  <TableHead className="font-medium">Role</TableHead>
+                )}
+                <TableHead className="font-medium">Login Time</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -94,11 +103,23 @@ export const LoginTracker = () => {
                 </TableRow>
               ) : (
                 loginRecords.map((record) => (
-                  <TableRow key={record.id}>
-                    <TableCell>{record.user_name}</TableCell>
-                    <TableCell>{record.user_role}</TableCell>
-                    <TableCell>
-                      {new Date(record.login_time).toLocaleString()}
+                  <TableRow key={record.id} className="hover:bg-gray-50 border-b">
+                    <TableCell className="font-medium">{record.user_name}</TableCell>
+                    {/* Only show Role cell if user_role exists in any record */}
+                    {loginRecords.some(r => r.user_role) && (
+                      <TableCell>
+                        {record.user_role && (
+                          <span className="px-2 py-1 rounded-full text-xs bg-gray-100 text-gray-800">
+                            {record.user_role}
+                          </span>
+                        )}
+                      </TableCell>
+                    )}
+                    <TableCell className="flex items-center gap-1">
+                      <Calendar className="h-3 w-3 text-gray-500" />
+                      <span>{new Date(record.login_time).toLocaleDateString()}</span>
+                      <Clock className="h-3 w-3 ml-2 text-gray-500" />
+                      <span>{new Date(record.login_time).toLocaleTimeString()}</span>
                     </TableCell>
                   </TableRow>
                 ))
